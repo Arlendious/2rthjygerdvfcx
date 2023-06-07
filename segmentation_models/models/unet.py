@@ -65,9 +65,9 @@ def DecoderUpsamplingX2Block(filters, stage, use_batchnorm=False):
             # Add attention mechanism to the skip connection
             print(tf.shape(x))
             print(tf.shape(skip))
-            attention = layers.Attention()([x, skip])
+            x = layers.Concatenate(axis=concat_axis, name=concat_name)([x, skip])
+            attention = layers.Attention()(x)
             # skip = layers.Multiply()([attention, skip])
-            x = layers.Concatenate(axis=concat_axis, name=concat_name)([x, attention])
 
         x = Conv3x3BnReLU(filters, use_batchnorm, name=conv1_name)(x)
         x = Conv3x3BnReLU(filters, use_batchnorm, name=conv2_name)(x)
