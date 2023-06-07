@@ -66,7 +66,7 @@ def DecoderUpsamplingX2Block(filters, stage, use_batchnorm=False):
             print(tf.shape(x))
             print(tf.shape(skip))
             x = layers.Concatenate(axis=concat_axis, name=concat_name)([x, skip])
-            attention = layers.Attention()(x)
+            x = layers.Attention()([x, x])
             # skip = layers.Multiply()([attention, skip])
 
         x = Conv3x3BnReLU(filters, use_batchnorm, name=conv1_name)(x)
