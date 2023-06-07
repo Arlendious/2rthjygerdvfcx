@@ -46,8 +46,6 @@ def Conv3x3BnReLU(filters, use_batchnorm, name=None):
 
 from keras import backend as K
 
-from keras import backend as K
-
 def DecoderUpsamplingX2Block(filters, stage, use_batchnorm=False):
     up_name = 'decoder_stage{}_upsampling'.format(stage)
     conv1_name = 'decoder_stage{}a'.format(stage)
@@ -62,7 +60,7 @@ def DecoderUpsamplingX2Block(filters, stage, use_batchnorm=False):
 
         if skip is not None:
             # To match the dimensions of x and skip 
-            skip = layers.Conv2D(filters, kernel_size=1, name='skip_adjust')(skip)
+            skip = layers.Conv2D(512, kernel_size=1, name='skip_adjust')(skip)
 
             # Add attention mechanism to the skip connection
             attention = layers.Attention()([x, skip])
