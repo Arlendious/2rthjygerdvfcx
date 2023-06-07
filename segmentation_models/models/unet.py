@@ -59,10 +59,8 @@ def DecoderUpsamplingX2Block(filters, stage, use_batchnorm=False):
         x = layers.UpSampling2D(size=2, name=up_name)(input_tensor)
 
         if skip is not None:
-            # Adjust the dimensions of skip connection
-            skip = layers.Conv2D(filters, kernel_size=1, activation='relu', padding='same')(skip)
-
-            # Add attention mechanism to the skip connection
+            skip = Conv3x3BnReLU(filters, use_batchnorm, name=attention_name)(skip)
+            skip = layers.UpSampling2D(size=2)(skip)
             attention = layers.Attention()([x, skip])
             skip = layers.Multiply()([attention, skip])
             x = layers.Concatenate(axis=concat_axis, name=concat_name)([x, skip])
