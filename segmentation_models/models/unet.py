@@ -3,6 +3,7 @@ from keras import backend as K
 from ._common_blocks import Conv2dBn
 from ._utils import freeze_model, filter_keras_submodules
 from ..backbones.backbones_factory import Backbones
+import tensorflow as tf
 
 backend = None
 layers = None
