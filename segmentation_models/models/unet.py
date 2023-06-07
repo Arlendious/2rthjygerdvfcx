@@ -62,7 +62,7 @@ def DecoderUpsamplingX2Block(filters, stage, use_batchnorm=False):
             # To match the dimensions of x and skip 
             skip = layers.Conv2D(512, kernel_size=1, name='skip_adjust')(skip)
             # Add attention mechanism to the skip connection
-            attention = layers.Attention()([x, skip])
+            attention = layers.Attention()([skip, x])
             skip = layers.Multiply()([attention, skip])
             x = layers.Concatenate(axis=concat_axis, name=concat_name)([x, skip])
 
