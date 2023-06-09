@@ -265,3 +265,56 @@ class UnetPlusPlusDecoder(tf.keras.Model):
                     )
         dense_x[f"x_{0}_{self.depth}"] = self.blocks[f"x_{0}_{self.depth}"](dense_x[f"x_{0}_{self.depth-1}"])
         return dense_x[f"x_{0}_{self.depth}"]
+    
+from typing import Optional, Union, List
+import tensorflow as tf
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Input, Activation, Conv2D
+from tensorflow.keras.layers import BatchNormalization, MaxPooling2D, UpSampling2D, Concatenate
+
+class UnetPlusPlusModel(tf.keras.Model):
+    def __init__(
+        self,
+        encoder_name = "resnet50",
+        encoder_depth = 5,
+        encoder_weights = "imagenet",
+        decoder_use_batchnorm = True,
+        decoder_channels = [256, 128, 64, 32, 16],
+        decoder_attention_type = "scse",
+        in_channels = 3,
+        classes = 3,
+        activation = "sigmoid",
+        aux_params = None,
+    ):
+        super(UnetPlusPlusModel, self).__init__()
+
+        self.encoder = ResNet50(
+            include_top=False,
+            weights="imagenet",
+            input_shape=(256, 256, 3),
+        )
+
+        self.decoder = UnetPlusPlusDecoder(
+            encoder_channels=self.encoder.out_channels,
+            decoder_channels=decoder_channels,
+            n_blocks=encoder_depth,
+            use_batchnorm=decoder_use_batchnorm,
+            center=False,
+            attention_type=decoder_attention_type,
+        )
+
+        self.segmentation_head = SegmentationHead(
+            in_channels=decoder_channels[-1],
+            out_channels=classes,
+            activation=activation,
+            kernel_size=3,
+        )
+
+        if aux_params is not None:
+            self.classification_head = ClassificationHead(in_channels=self.encoder.out_channels[-1], **aux_params)
+        else:
+            self.classification_head = None
+
+        self.name = "unetplusplus-{}".format(encoder_name)
+        self.initialize()
+
