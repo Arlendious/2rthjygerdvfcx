@@ -9,6 +9,7 @@ from segmentation_models import Unet
 from segmentation_models import Linknet
 from segmentation_models import PSPNet
 from segmentation_models import FPN
+from segmentation_model import Unet_plus_plus
 from segmentation_models import get_available_backbone_names
 
 if sm.framework() == sm._TF_KERAS_FRAMEWORK_NAME:
@@ -131,6 +132,15 @@ def test_fpn(backbone):
     _test_shape(
         FPN, backbone, input_shape=(256, 256, 4), encoder_weights=None)
 
+@pytest.mark.parametrize('backbone', _select_names(BACKBONES))
+def test_unet_plus_plus(backbone):
+    _test_none_shape(
+        Unet, backbone, encoder_weights=None)
 
+    _test_none_shape(
+        Unet, backbone, encoder_weights='imagenet')
+
+    _test_shape(
+        Unet, backbone, input_shape=(256, 256, 4), encoder_weights=None)
 if __name__ == '__main__':
     pytest.main([__file__])
