@@ -9,7 +9,7 @@ from segmentation_models import Unet
 from segmentation_models import Linknet
 from segmentation_models import PSPNet
 from segmentation_models import FPN
-from segmentation_model import Unet_plus_plus
+from segmentation_models import Unet_plus_plus
 from segmentation_models import get_available_backbone_names
 
 if sm.framework() == sm._TF_KERAS_FRAMEWORK_NAME:
