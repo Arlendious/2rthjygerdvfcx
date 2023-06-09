@@ -113,11 +113,13 @@ from .models.unet import Unet as _Unet
 from .models.pspnet import PSPNet as _PSPNet
 from .models.linknet import Linknet as _Linknet
 from .models.fpn import FPN as _FPN
+from .models.unet_plus_plus import UnetPlusPlusModel as _UnetPlusPlusModel
 
 Unet = inject_global_submodules(_Unet)
 PSPNet = inject_global_submodules(_PSPNet)
 Linknet = inject_global_submodules(_Linknet)
 FPN = inject_global_submodules(_FPN)
+UnetPlusPlusModel = inject_global_submodules(_UnetPlusPlusModel)
 get_available_backbone_names = Backbones.models_names
 
 
@@ -133,7 +135,7 @@ def get_preprocessing(name):
 
 
 __all__ = [
-    'Unet', 'PSPNet', 'FPN', 'Linknet',
+    'Unet', 'PSPNet', 'FPN', 'Linknet','UnetPlusPlusModel',
     'set_framework', 'framework',
     'get_preprocessing', 'get_available_backbone_names',
     'losses', 'metrics', 'utils',
